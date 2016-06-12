@@ -6,14 +6,43 @@
 
 This module implements k-means clustering with k-means++ initialization.
 
-# Credits
+## Example
 
+[Click here for a live demo](http://rickyreusser.com/kmpp/) of three-dimensional k-means clustering on the Lorenz Attractor.
+
+<a href="http://rickyreusser.com/kmpp/"><img src="./images/demo.png" alt="Lorenz Attractor Demo" width="400"></a>
+
+To cluster points, just pass an array of arrays containing coordinates to `kmpp`. The output contains a list of centroids, a count of the number of points in each centroid, and a list of assignments of the original input to each centroid.
+
+```javascript
+var kmpp = require('<this module, from github>');
+
+kmpp([
+  [x1, y1, ...],
+  [x2, y2, ...],
+  [x3, y3, ...],
+  ...
+], {
+  {k: 4}
+});
+
+// => 
+// { centroids: [[xm1, ym1, ...], [xm2, ym2, ...], [xm3, ym3, ...]],
+//   counts: [ 7, 6, 7 ],
+//   assignments: [ 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 ]
+// }
+```
+
+## Credits
+
+* [cmtt](https://github.com/cmtt) implemented the original version, of which
+  this module is simply a major refactoring and extension.
 * [Jared Harkins](https://github.com/hDeraj) improved the performance by
   reducing the amount of function calls, reverting to Manhattan distance
   for measurements and improved the random initialization by choosing from
   points
 
-# Further reading
+## Further reading
 
 * [Wikipedia: k-means clustering](https://en.wikipedia.org/wiki/K-means_clustering)
 * [Wikipedia: Determining the number of clusters in a data set](https://en.wikipedia.org/wiki/Determining_the_number_of_clusters_in_a_data_set)

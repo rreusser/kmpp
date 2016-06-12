@@ -79,6 +79,7 @@ describe('kmpp', function () {
 
     for (run = 0; run < runs; run++) {
       var out = kmpp(x, {k: k, kmpp: false}, state);
+      console.log(out);
       assert.equal(out, state, 'input === output');
 
       var sum = 0;
