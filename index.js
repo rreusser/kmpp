@@ -2,53 +2,51 @@
 
 module.exports = kmeans;
 
-var guessK = require('./src/guess-k');
 var initializeKmpp = require('./src/initialize-kmpp');
 var initializeNaive = require('./src/initialize-naive');
 var iterate = require('./src/iterate');
-var l1Distance = require('./src/l1-distance');
+var distanceMetric = require('./src/l1-distance');
 
-function kmeans (points, opts) {
-  var i, k, n, dim, iter, converged;
+function kmeans (points, opts, state) {
+  var i, k, n, dim, iter, converged, c;
 
   opts = opts || {};
   var initialize = opts.initialize === undefined ? true : opts.initialize;
   var kmpp = opts.kmpp === undefined ? true : !!opts.kmpp;
-  var distance = opts.distance === undefined ? l1Distance : opts.distance;
+  var distance = opts.distance === undefined ? distanceMetric : opts.distance;
   var maxIterations = opts.maxIterations === undefined ? 10 : opts.maxIterations;
-  var initializer = opts.kmpp ? initializeKmpp : initializeNaive;
+  var initializer = !!opts.kmpp ? initializeKmpp : initializeNaive;
 
   n = points.length;
   dim = points[0].length;
 
-  if (!k) {
-    k = guessK(n);
+  if (k === undefined) {
+    k = ~~(Math.sqrt(n * 0.5));
   }
 
-  var centroids = [];
-  var counts = [];
-  var assignments = [];
-  var sums = [];
+  state = state || {};
+  state.centroids = state.centroids || new Array(k);
+  state.counts = state.counts || new Array(k);
+  state.assignments = state.assignments || new Array(n);
+
+  // Initialize the components of the centroids if they don't look right:
+  for (i = 0; i < k; i++) {
+    c = state.centroids[i];
+    if (!Array.isArray(c) || state.centroids[i].length !== dim) {
+      state.centroids[i] = [];
+    }
+  }
 
   if (initialize) {
-    initializer(k, points, centroids, counts, assignments, distance);
-  }
-
-  for (i = 0; i < k; i++) {
-    sums[i] = new Array(dim);
+    initializer(k, points, state, distance);
   }
 
   converged = false;
   iter = 0;
 
   while (!converged && ++iter <= maxIterations) {
-    converged = iterate(k, points, centroids, counts, assignments, distance, sums);
+    converged = iterate(k, points, state, distance);
   }
 
-  return {
-    centroids: centroids,
-    counts: counts,
-    assignments: assignments
-  };
-
+  return state;
 };

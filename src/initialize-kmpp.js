@@ -2,12 +2,16 @@
 
 module.exports = initializeKmpp;
 
-function initializeKmpp (k, points, centroids, counts, assignments, distance) {
+function initializeKmpp (k, points, state, distance) {
   var i, j, l, m, cmp1, cmp2, Dsum, tmpDsum, D, ntries, bestIdx;
-
-  var p0, bestDsum, rndVal, tmpD, m;
-
+  var p, bestDsum, rndVal, tmpD, m;
   var n = points.length;
+  var dim = points[0].length;
+
+  var centroids = state.centroids;
+  var counts = state.counts;
+  var assignments = state.assignments;
+
 
   // K-Means++ initialization
 
@@ -16,16 +20,18 @@ function initializeKmpp (k, points, centroids, counts, assignments, distance) {
   ntries = 2 + Math.round(Math.log(k));
 
   // 1. Choose one center uniformly at random from the data points.
-  p0 = points[ ~~(Math.random() * n) ];
+  p = points[~~(Math.random() * n)];
 
-  centroids[0] = p0.slice(0);
+  for (i = dim - 1; i >= 0; i--) {
+    centroids[0][i] = p[i];
+  }
   assignments[0] = 0;
   counts[0] = 1;
 
   // 2. For each data point x, compute D(x), the distance between x and
   //    the nearest center that has already been chosen.
   for (i = 0, Dsum = 0; i < n; ++i) {
-    D[i] = distance(p0, points[i]);
+    D[i] = distance(p, points[i]);
     Dsum += D[i];
   }
 
@@ -63,6 +69,10 @@ function initializeKmpp (k, points, centroids, counts, assignments, distance) {
 
     Dsum = bestDsum;
 
+    p = points[bestIdx];
+    for (j = dim - 1; j >= 0; j--) {
+      centroids[i][j] = p[j];
+    }
     centroids[i] = points[bestIdx].slice(0);
     assignments[i] = i;
     counts[i] = 1;
