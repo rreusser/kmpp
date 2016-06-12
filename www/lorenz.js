@@ -12,7 +12,7 @@ function Lorenz (n) {
     initialize: function (opts) {
       var opts = opts || {};
       this.t = 0;
-      this.dt = 0.005;
+      this.dt = 0.006;
 
       for (var i = 0; i < n; i++) {
         var t = i / (n - 1)

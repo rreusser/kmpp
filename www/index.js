@@ -10,7 +10,7 @@ var top = 80;
 var margin = {b: 30, l: 30, r: 30, t: 35};
 
 var plot = {
-  lorenz: Lorenz(500),
+  lorenz: Lorenz(300),
   K: 5,
   x: [],
   y: [],
