@@ -1,0 +1,74 @@
+@import 'fonts';
+@import 'corner';
+
+html, body {
+  margin: 0;
+  font-family: 'Computer Modern Serif';
+}
+
+html {
+  padding: 0;
+}
+
+body {
+  padding: 10px;
+}
+
+h1 {
+  margin: 0;
+}
+
+.content {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+p {
+  margin-top: 0;
+  position: relative;
+  z-index: 100;
+  max-width: 450px;
+  padding-right: 80px;
+}
+
+#plot {
+  max-height: 600px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input[type=number] {
+  padding: 3px 5px 2px 5px;
+  margin-left: 5px;
+  width: 50px;
+  border: 1px solid black;
+  border-radius: 3px;
+  font-family: 'Computer Modern Serif', sans-serif;
+  font-size: 14px;
+}
+
+.btn {
+  display: inline-block;
+  background: none;
+  border: 1px solid black;
+  font-family: Times, serif;
+  font-size: 14px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #ccc;
+}
+
+.btn:active {
+  background-color: #888;
+  color: white;
+}
+
+.btn:not(:first-child) {
+  margin-left: 0.5em;
+}

@@ -8,20 +8,21 @@ var iterate = require('./src/iterate');
 var distanceMetric = require('./src/l1-distance');
 
 function kmeans (points, opts, state) {
-  var i, k, n, dim, iter, converged, c;
+  var i, k, n, dim, iter, converged, c, initializer;
 
   opts = opts || {};
   var initialize = opts.initialize === undefined ? true : opts.initialize;
   var kmpp = opts.kmpp === undefined ? true : !!opts.kmpp;
   var distance = opts.distance === undefined ? distanceMetric : opts.distance;
   var maxIterations = opts.maxIterations === undefined ? 10 : opts.maxIterations;
-  var initializer = !!opts.kmpp ? initializeKmpp : initializeNaive;
 
   n = points.length;
   dim = points[0].length;
 
-  if (k === undefined) {
+  if (opts.k === undefined) {
     k = ~~(Math.sqrt(n * 0.5));
+  } else {
+    k = opts.k;
   }
 
   state = state || {};
@@ -38,6 +39,8 @@ function kmeans (points, opts, state) {
   }
 
   if (initialize) {
+    initializer = kmpp ? initializeKmpp : initializeNaive;
+
     initializer(k, points, state, distance);
   }
 

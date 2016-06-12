@@ -1,0 +1,43 @@
+{
+  "name": "kmpp",
+  "version": "1.0.0",
+  "description": "The k-means algorithm with k-means++ initialization",
+  "main": "index.js",
+  "author": {
+    "name": "Ricky Reusser",
+    "email": "rsreusser@gmail.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rreusser/kmpp.git"
+  },
+  "scripts": {
+    "start": "budo-less www/index.js:bundle.js --less=www/style.less --open --dir www | garnish",
+    "test": "semistandard && mocha",
+    "build:clean": "rm -rf dist",
+    "build:js": "browserify www/index.js | uglifyjs -cm > dist/bundle.js",
+    "build:html": "cp www/index.html dist/index.html",
+    "build:css": "lessc www/style.less dist/style.css",
+    "build:fonts": "cp -r www/fonts dist/fonts",
+    "build": "mkdir -p dist && npm run build:html && npm run build:js && npm run build:css && npm run build:fonts",
+    "deploy": "gh-pages -d dist"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "budo-less": "^1.0.1",
+    "chai": "^3.5.0",
+    "color-space": "^1.14.3",
+    "garnish": "^5.2.0",
+    "mocha": "^2.5.3",
+    "plotly.js": "file:../../../../plotly/plotly.js"
+  },
+  "dependencies": {},
+  "semistandard": {
+    "globals": [
+      "describe",
+      "it",
+      "beforeEach"
+    ]
+  }
+}
