@@ -12,15 +12,22 @@ function Lorenz (n) {
     initialize: function (opts) {
       var opts = opts || {};
       this.t = 0;
-      this.dt = 0.006;
+      this.dt = 0.0006;
 
       for (var i = 0; i < n; i++) {
         var t = i / (n - 1)
-        this.x[i] = [
-          10 + Math.random() * 10,
-          0 + 10 * Math.random(),
-          10 + 20 * Math.random()
-        ];
+        var r = Infinity;
+        while (r > 1) {
+          var dx = Math.random() * 2 - 1;
+          var dy = Math.random() * 2 - 1;
+          var dz = Math.random() * 2 - 1;
+          r = Math.sqrt(dx * dx + dy * dy + dz * dz);
+          this.x[i] = [
+            6 * dx,
+            10 * dy,
+            10 + 10 * dz
+          ];
+        }
       }
 
       return this;

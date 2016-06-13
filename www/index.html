@@ -18,6 +18,8 @@
     <meta name="og:site_name" content="Ricky Reusser" />
     <meta name="og:title" content="K-means++" />
     <meta name="og:description" content="The k-means algorithm with k-means++ initialization" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
 
@@ -31,8 +33,7 @@
 
     <div class="content">
       <h1>K-means<code>++</code></h1>
-      <p>K-means with robust initialization. An update to the <a href="https://github.com/cmtt/kmpp">kmpp implementation of cmtt</a>, to whom I'm very grateful!</p>
-      <p>This demo performs k-means for the Lorenz Attractor in three dimensions, using <a href="https://plot.ly/javascript/">plotly.js</a> for plotting.
+      <p>This demo performs k-means++ (k-means with more robust initialization than selecting random points) for the Lorenz Attractor in three dimensions, using <a href="https://plot.ly/javascript/">plotly.js</a> for plotting. An update to the <a href="https://github.com/cmtt/kmpp">kmpp implementation of cmtt</a>, to whom I'm very grateful!</p>
       <div id="plot"/>
     </div>
     <script src="bundle.js"></script>

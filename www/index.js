@@ -10,8 +10,8 @@ var top = 80;
 var margin = {b: 30, l: 30, r: 30, t: 35};
 
 var plot = {
-  lorenz: Lorenz(300),
-  K: 5,
+  lorenz: Lorenz(50000),
+  K: 6,
   x: [],
   y: [],
   cx: [],
@@ -41,7 +41,9 @@ var plot = {
   },
 
   iterate: function () {
-    this.lorenz.iterate();
+    for (var i = 0; i < 15; i++) {
+      this.lorenz.iterate();
+    }
     this.cluster(false);
     this.unpack();
 
@@ -95,11 +97,11 @@ var plot = {
     this.cluster(true);
     this.unpack();
 
-    var plot = document.getElementById('plot');
+    var gd = document.getElementById('plot');
     window.addEventListener('resize', function () {
       Plotly.relayout('plot', {
-        width: plot.offsetWidth,
-        height: plot.offsetHeight
+        width: gd.offsetWidth,
+        height: gd.offsetHeight
       });
     });
 
@@ -111,7 +113,8 @@ var plot = {
         name: 'Data',
         marker: {
           color: this.pointColors,
-          size: 5
+          size: 2,
+          opacity: 0.2
         }
       },
       {
@@ -121,7 +124,8 @@ var plot = {
         name: 'Means',
         marker: {
           color: this.meanColors,
-          size: 15
+          size: 8,
+          opacity: 0.7,
         }
       },
     ], {
@@ -139,8 +143,10 @@ var plot = {
       dragmode: 'pan',
       hovermode: 'closest',
       showlegend: false,
+      width: gd.offsetWidth,
+      height: Math.min(400, gd.offsetHeight)
     }, {
-      scrollZoom: true
+      scrollZoom: true,
     });
 
     this.start();

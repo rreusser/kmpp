@@ -14,7 +14,7 @@ function kmeans (points, opts, state) {
   var initialize = opts.initialize === undefined ? true : opts.initialize;
   var kmpp = opts.kmpp === undefined ? true : !!opts.kmpp;
   var distance = opts.distance === undefined ? distanceMetric : opts.distance;
-  var maxIterations = opts.maxIterations === undefined ? 10 : opts.maxIterations;
+  var maxIterations = opts.maxIterations === undefined ? 100 : opts.maxIterations;
 
   n = points.length;
   dim = points[0].length;
