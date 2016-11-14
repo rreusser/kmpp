@@ -8,7 +8,6 @@ function initializeKmpp (k, points, state, distance) {
   var n = points.length;
   var dim = points[0].length;
 
-  console.log('state:', state);
   var centroids = state.centroids;
   var counts = state.counts;
   var assignments = state.assignments;

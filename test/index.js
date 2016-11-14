@@ -41,12 +41,13 @@ describe('kmpp', function () {
     n = 20;
     offset = 1e6;
 
+    var state = {};
     for (i = 0, x = []; i < n; i++) {
       x[i] = [Math.floor(i * k / n) * 1e6 + i];
     }
 
     for (run = 0; run < runs; run++) {
-      var out = kmpp(x, {k: k, kmpp: true});
+      var out = kmpp(x, {k: k, kmpp: true, state: state});
 
       assert.equal(out, state, 'returns state object');
 
@@ -70,12 +71,15 @@ describe('kmpp', function () {
     k = 3;
     n = 20;
 
+    var state = {};
     for (i = 0, x = []; i < n; i++) {
       x[i] = [Math.floor(i * k / n) * 1e6 + i];
     }
 
     for (run = 0; run < runs; run++) {
-      var out = kmpp(x, {k: k, kmpp: false});
+      var out = kmpp(x, {k: k, kmpp: false, state: state});
+
+      assert.equal(out, state, 'returns state object');
 
       var sum = 0;
       for (i = 0; i < k; i++) {

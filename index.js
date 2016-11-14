@@ -7,7 +7,7 @@ var initializeNaive = require('./src/initialize-naive');
 var iterate = require('./src/iterate');
 var distanceMetric = require('./src/l1-distance');
 
-function kmeans (points, opts, state) {
+function kmeans (points, opts) {
   var i, k, n, dim, iter, converged, c, initializer;
 
   opts = opts || {};
@@ -25,7 +25,7 @@ function kmeans (points, opts, state) {
     k = opts.k;
   }
 
-  state = state || {};
+  var state = opts.state || {};
   state.centroids = state.centroids || new Array(k);
   state.counts = state.counts || new Array(k);
   state.assignments = state.assignments || new Array(n);
