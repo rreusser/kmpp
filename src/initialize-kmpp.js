@@ -1,17 +1,17 @@
-"use strict";
+'use strict';
 
 module.exports = initializeKmpp;
 
 function initializeKmpp (k, points, state, distance) {
   var i, j, l, m, cmp1, cmp2, Dsum, tmpDsum, D, ntries, bestIdx;
-  var p, bestDsum, rndVal, tmpD, m;
+  var p, bestDsum, rndVal, tmpD;
   var n = points.length;
   var dim = points[0].length;
 
+  console.log('state:', state);
   var centroids = state.centroids;
   var counts = state.counts;
   var assignments = state.assignments;
-
 
   // K-Means++ initialization
 
@@ -40,7 +40,7 @@ function initializeKmpp (k, points, state, distance) {
   //    probability proportional to D(x)^2. (Repeated until k centers
   //    have been chosen.)
   for (i = 1; i < k; ++i) {
-    bestDsum = Infinity
+    bestDsum = Infinity;
     bestIdx = -1;
 
     for (j = 0; j < ntries; ++j) {
@@ -83,5 +83,4 @@ function initializeKmpp (k, points, state, distance) {
       D[j] = cmp1 > cmp2 ? cmp2 : cmp1;
     }
   }
-
 }

@@ -35,8 +35,7 @@ describe('kmpp', function () {
 
   it('accepts repeated application on state i/o', function () {
     runs = 2;
-    var i, k, n, x, offset;
-    var state = {};
+    var i, k, n, x, offset, run;
 
     k = 3;
     n = 20;
@@ -47,9 +46,9 @@ describe('kmpp', function () {
     }
 
     for (run = 0; run < runs; run++) {
-      var out = kmpp(x, {k: k, kmpp: true}, state);
+      var out = kmpp(x, {k: k, kmpp: true});
 
-      assert.equal(out, state, 'input === output');
+      assert.equal(out, state, 'returns state object');
 
       for (i = 0; i < k; i++) {
         assert(out.centroids[i][0] % offset < n, 'means is within ' + n + ' of ' + offset + ' * n (got means = ' + JSON.stringify(out.centroids) + ')');
@@ -66,21 +65,17 @@ describe('kmpp', function () {
 
   it('runs successfully without km++ initialization', function () {
     runs = 2;
-    var i, j, k, n, x, offset;
-    var state = {};
+    var i, k, n, x, run;
 
     k = 3;
     n = 20;
-    offset = 1e6;
 
     for (i = 0, x = []; i < n; i++) {
       x[i] = [Math.floor(i * k / n) * 1e6 + i];
     }
 
     for (run = 0; run < runs; run++) {
-      var out = kmpp(x, {k: k, kmpp: false}, state);
-      console.log(out);
-      assert.equal(out, state, 'input === output');
+      var out = kmpp(x, {k: k, kmpp: false});
 
       var sum = 0;
       for (i = 0; i < k; i++) {

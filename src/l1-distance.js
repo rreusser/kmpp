@@ -8,4 +8,4 @@ function l1Distance (a, b) {
     sum += Math.abs(a[i] - b[i]);
   }
   return sum;
-};
+}

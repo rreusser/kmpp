@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = kmeans;
 
@@ -51,5 +51,7 @@ function kmeans (points, opts, state) {
     converged = iterate(k, points, state, distance);
   }
 
+  state.iterations = iter;
+
   return state;
-};
+}

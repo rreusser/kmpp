@@ -10,12 +10,11 @@ function Lorenz (n) {
     x: [],
 
     initialize: function (opts) {
-      var opts = opts || {};
+      opts = opts || {};
       this.t = 0;
       this.dt = 0.0006;
 
       for (var i = 0; i < n; i++) {
-        var t = i / (n - 1)
         var r = Infinity;
         while (r > 1) {
           var dx = Math.random() * 2 - 1;
@@ -34,7 +33,9 @@ function Lorenz (n) {
     },
 
     iterate: function () {
-      var s = 10, b = 8/3, r = 28;
+      var s = 10;
+      var b = 8 / 3;
+      var r = 28;
       var p, dx, dy, dz;
       this.t += this.dt;
       var xh, yh, zh;
@@ -56,6 +57,6 @@ function Lorenz (n) {
         p[1] += dy * this.dt;
         p[2] += dz * this.dt;
       }
-    },
+    }
   };
 }

@@ -31,9 +31,9 @@
     "color-space": "^1.14.3",
     "garnish": "^5.2.0",
     "mocha": "^2.5.3",
-    "plotly.js": "file:../../../../plotly/plotly.js"
+    "plotly.js": "^1.19.2",
+    "semistandard": "^9.1.0"
   },
-  "dependencies": {},
   "semistandard": {
     "globals": [
       "describe",

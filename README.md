@@ -6,6 +6,10 @@
 
 This module implements k-means clustering with k-means++ initialization.
 
+**Why another k-means moduel?**
+
+To be honest, I found the API for most k-means modules a bit difficult to work with, and the modules that had a nice API didn't always work the best. So I took the best module I could find and tried to improve it. By the time I was done, I had a module I was happy with but which I felt had diverged too far to issue a reasonable pull request. So here we are. 🚀
+
 ## Example
 
 [Click here for a live demo](http://rickyreusser.com/kmpp/) of three-dimensional k-means clustering on the Lorenz Attractor.
@@ -32,6 +36,10 @@ kmpp([
 //   assignments: [ 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 ]
 // }
 ```
+
+## API
+
+#### `require('kmpp'
 
 ## Credits
 

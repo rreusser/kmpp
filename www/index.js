@@ -3,15 +3,15 @@
 var Plotly = require('plotly.js');
 var Lorenz = require('./lorenz');
 var kmeans = require('../');
-var rgb = require('color-space/rgb');
+require('color-space/rgb');
 var hsl = require('color-space/hsl');
 
 var top = 80;
 var margin = {b: 30, l: 30, r: 30, t: 35};
 
 var plot = {
-  lorenz: Lorenz(50000),
-  K: 6,
+  lorenz: Lorenz(500),
+  K: 15,
   x: [],
   y: [],
   cx: [],
@@ -24,7 +24,7 @@ var plot = {
   pointColors: [],
 
   unpack: function () {
-    var i, j;
+    var i;
     var n = this.lorenz.x.length;
     this.x = [];
 
@@ -47,16 +47,19 @@ var plot = {
     this.cluster(false);
     this.unpack();
 
-    Plotly.animate('plot', [
-      {
+    Plotly.animate('plot', [{
+      data: [{
         x: this.x,
         y: this.y,
-        'marker.color': this.pointColors,
+        'marker.color': this.pointColors
       }, {
         x: this.cx,
         y: this.cy
-      }
-    ], {duration: 0}, [0, 1]);
+      }]
+    }], {
+      transition: {duration: 0},
+      frame: {duration: 0, redraw: false}
+    });
   },
 
   cluster: function (initialize) {
@@ -66,27 +69,28 @@ var plot = {
   _onRAF: function () {
     this.iterate();
 
-    this._raf = requestAnimationFrame(this.onRAF);
+    this._raf = window.requestAnimationFrame(this.onRAF);
   },
 
   stop: function () {
-    cancelAnimationFrame(this._raf);
+    window.cancelAnimationFrame(this._raf);
   },
 
   start: function () {
     this.onRAF = this._onRAF.bind(this);
 
-    this._raf = requestAnimationFrame(this.onRAF);
+    this._raf = window.requestAnimationFrame(this.onRAF);
   },
 
   createColors: function () {
+    var i;
     this.colorTable = [];
-    for (var i = 0; i < this.K; i++) {
+    for (i = 0; i < this.K; i++) {
       this.colorTable.push('rgb(' + hsl.rgb([i / this.K * 360, 60, 50]).map(Math.round).join(',') + ')');
     }
 
     this.meanColors = [];
-    for (var i = 0; i < this.K; i++) {
+    for (i = 0; i < this.K; i++) {
       this.meanColors.push('rgb(' + hsl.rgb([i / this.K * 360, 60, 40]).map(Math.round).join(',') + ')');
     }
   },
@@ -113,8 +117,8 @@ var plot = {
         name: 'Data',
         marker: {
           color: this.pointColors,
-          size: 2,
-          opacity: 0.2
+          size: 4,
+          opacity: 0.8
         }
       },
       {
@@ -124,20 +128,20 @@ var plot = {
         name: 'Means',
         marker: {
           color: this.meanColors,
-          size: 8,
-          opacity: 0.7,
+          size: 12,
+          opacity: 1.0
         }
-      },
+      }
     ], {
       xaxis: {
-        range: this.xrange,
+        range: this.xrange
       },
       yaxis: {
-        range: this.yrange,
+        range: this.yrange
       },
       font: {
         family: '"Computer Modern Serif", sans-serif',
-        size: 16,
+        size: 16
       },
       margin: this.margin,
       dragmode: 'pan',
@@ -146,7 +150,7 @@ var plot = {
       width: gd.offsetWidth,
       height: Math.min(400, gd.offsetHeight)
     }, {
-      scrollZoom: true,
+      scrollZoom: true
     });
 
     this.start();
