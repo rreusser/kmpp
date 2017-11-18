@@ -77,4 +77,4 @@ Returns an object containing information about the centroids and point assignmen
 
 # License
 
-&copy 2017. MIT License.
+&copy; 2017. MIT License.
