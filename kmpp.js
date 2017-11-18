@@ -1,19 +1,20 @@
-'use strict';
+"use strict";
 
 module.exports = kmeans;
 
 var initializeKmpp = require('./src/initialize-kmpp');
 var initializeNaive = require('./src/initialize-naive');
 var iterate = require('./src/iterate');
-var distanceMetric = require('./src/l1-distance');
+var distanceMetric = require('./src/l-distance');
 
-function kmeans (points, opts) {
+function kmeans (points, opts, state) {
   var i, k, n, dim, iter, converged, c, initializer;
 
   opts = opts || {};
-  var initialize = opts.initialize === undefined ? true : opts.initialize;
+  var initialize = opts.initialize === undefined ? (!state.centroids) : opts.initialize;
   var kmpp = opts.kmpp === undefined ? true : !!opts.kmpp;
-  var distance = opts.distance === undefined ? distanceMetric : opts.distance;
+  var norm = opts.norm === undefined ? 2 : opts.norm;
+  var distance = opts.distance === undefined ? distanceMetric(norm) : opts.distance;
   var maxIterations = opts.maxIterations === undefined ? 100 : opts.maxIterations;
 
   n = points.length;
@@ -25,7 +26,7 @@ function kmeans (points, opts) {
     k = opts.k;
   }
 
-  var state = opts.state || {};
+  state = state || {};
   state.centroids = state.centroids || new Array(k);
   state.counts = state.counts || new Array(k);
   state.assignments = state.assignments || new Array(n);
@@ -44,14 +45,12 @@ function kmeans (points, opts) {
     initializer(k, points, state, distance);
   }
 
-  converged = false;
+  state.converged = state.converged || false;
   iter = 0;
 
-  while (!converged && ++iter <= maxIterations) {
-    converged = iterate(k, points, state, distance);
+  while (!state.converged && ++iter <= maxIterations) {
+    state.converged = iterate(k, points, state, distance);
   }
 
-  state.iterations = iter;
-
   return state;
-}
+};

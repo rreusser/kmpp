@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 module.exports = iterate;
 
 function iterate (k, points, state, distance) {
-  var i, j, p, c, cnt, minDist, dist;
+  var i, j, p, c, cnt, minDist, dist, c;
   var converged = true;
 
   // Unpack the state:
@@ -25,9 +25,9 @@ function iterate (k, points, state, distance) {
     c = 0;
     minDist = distance(centroids[0], points[i]);
 
-    for (j = 1; j < k; j++) {
+    for(j = 1; j < k; j++) {
       dist = distance(centroids[j], points[i]);
-      if (dist < minDist) {
+      if(dist < minDist) {
         minDist = dist;
         c = j;
       }
@@ -54,7 +54,7 @@ function iterate (k, points, state, distance) {
   for (i = 0; i < n; i++) {
     c = centroids[assignments[i]];
     p = points[i];
-    for (j = dim; j >= 0; j--) {
+    for(j = dim; j >= 0; j--) {
       c[j] += p[j];
     }
   }
@@ -63,10 +63,11 @@ function iterate (k, points, state, distance) {
   for (i = 0; i < k; i++) {
     c = centroids[i];
     cnt = counts[i];
-    for (j = dim; j >= 0; j--) {
+    for(j = dim; j >= 0; j--) {
       c[j] /= cnt;
     }
   }
+
 
   return converged;
 }

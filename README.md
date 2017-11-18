@@ -1,70 +1,120 @@
-# kmpp
+kmpp
+====
 
-> The k-means algorithm with k-means++ initialization
+When dealing with lots of data points, clustering algorithms may be needed in
+order to group them. The k-means algorithm partitions _n_ data points into
+_k_ clusters and finds the centroids of these clusters incrementally.
 
-## Introduction
+The basic k-means algorithm is initialized with _k_ centroids at random
+positions.
 
-This module implements k-means clustering with k-means++ initialization.
+It assigns data points to the closest cluster, the centroids of each
+cluster are re-calculated afterwards. These assignment/recalculating steps are
+repeated until the centroids are not changing anymore.
 
-**Why another k-means moduel?**
+This implementation addresses some disadvantages of the arbitrary
+initialization method with the k-means++ algorithm (see "Further reading" at the
+end).
 
-To be honest, I found the API for most k-means modules a bit difficult to work with, and the modules that had a nice API didn't always work the best. So I took the best module I could find and tried to improve it. By the time I was done, I had a module I was happy with but which I felt had diverged too far to issue a reasonable pull request. So here we are. 🚀
+## Installing via npm
 
-## Example
+Install kmpp as Node.js module via NPM:
+````bash
+$ npm install kmpp
+````
 
-[Click here for a live demo](http://rickyreusser.com/kmpp/) of three-dimensional k-means clustering on the Lorenz Attractor.
+## Setting up a new instance
 
-<a href="http://rickyreusser.com/kmpp/"><img src="./images/demo.png" alt="Lorenz Attractor Demo" width="400"></a>
+````js
+  // var kmpp = require('kmpp'); /* When running in Node.js */
+  var k = new kmpp();
+````
 
-To cluster points, just pass an array of arrays containing coordinates to `kmpp`. The output contains a list of centroids, a count of the number of points in each centroid, and a list of assignments of the original input to each centroid.
+## Attributes
 
-```javascript
-var kmpp = require('<this module, from github>');
+### kmpp [Boolean]
 
-kmpp([
-  [x1, y1, ...],
-  [x2, y2, ...],
-  [x3, y3, ...],
-  ...
-], {
-  {k: 4}
-});
+Enables or disables k-means++ initialization. If disabled, the initial
+centroids are selected randomly. It is recommended to leave this setting
+enabled, as it reduces the amount of the actual algorithm's iteration steps.
 
-// => 
-// { centroids: [[xm1, ym1, ...], [xm2, ym2, ...], [xm3, ym3, ...]],
-//   counts: [ 7, 6, 7 ],
-//   assignments: [ 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 ]
-// }
-```
+### k [number]
 
-## API
+This value defines the amount of clusters. You can let the module guess the
+amount by the rule of thumb with the guessK() function. It is crucial to select
+an appropriate value of clusters in order to find a good solution.
 
-#### `require('kmpp'
+### maxIterations [number]
 
-## Credits
+Defines the maximum amount of iterations which might be useful when performance
+is more important than accuracy. Disabled by default with the value -1.
 
-* [cmtt](https://github.com/cmtt) implemented the original version, of which
-  this module is simply a major refactoring and extension.
+### converged
+
+Returns true when the clustering is finished, false otherwise.
+
+### iterations
+
+Returns the amount of iterations.
+
+## Methods
+
+### reset ()
+
+Clears data points and calculated results.
+
+### setPoints (points)
+
+setPoints assigns an array of data points which should be clustered and calls
+reset(). Use the the format [{ x : x0, y : y0 }, ... , { x : xn, y: yn }].
+
+### guessK ()
+
+Guess the amount of clusters by the rule of thumb. (k = Math.sqrt( n * 0.5)).
+See below for advice for choosing the right value for k.
+
+### initCentroids ()
+
+The initial centroids are selected by the k-means++ algorithm or randomly. The
+latter behavior is disabled by default. k-means++ finds initial values close to
+the final result, therefore, less iterations are required for the final result
+usually.
+
+### iterate ()
+
+As k-means is an incremental algorithm, the iterate function should be called
+until the centroids do not change anymore.
+
+### cluster (callback)
+
+Convenience function which calls the iterate() function until the algorithm has
+finished.
+
+# Tests
+
+For the moment, you could open index.html or index-animated.html in your
+browser.
+
+# Todo
+
+  * remove the dependency on jQuery
+  * add build tools
+  * better testing and visualization
+
+# Credits
+
 * [Jared Harkins](https://github.com/hDeraj) improved the performance by
   reducing the amount of function calls, reverting to Manhattan distance
   for measurements and improved the random initialization by choosing from
   points
 
-## Further reading
+# Further reading
 
 * [Wikipedia: k-means clustering](https://en.wikipedia.org/wiki/K-means_clustering)
 * [Wikipedia: Determining the number of clusters in a data set](https://en.wikipedia.org/wiki/Determining_the_number_of_clusters_in_a_data_set)
 * [k-means++: The advantages of careful seeding, Arthur Vassilvitskii](http://ilpubs.stanford.edu:8090/778/1/2006-13.pdf)
 * [k-means++: The advantages of careful seeding, Presentation by Arthur Vassilvitskii (Presentation)](http://theory.stanford.edu/~sergei/slides/BATS-Means.pdf)
 
-## License
+# License
 
-&copy; 2016 Ricky Reusser. MIT License.
-&copy; [cmtt](https://github.com/cmtt). MIT License.
-
-[npm-image]: https://badge.fury.io/js/kmpp.svg
-[npm-url]: https://npmjs.org/package/kmpp
-[travis-image]: https://travis-ci.org/rreusser/kmpp.svg?branch=master
-[travis-url]: https://travis-ci.org//kmpp
-[daviddm-image]: https://david-dm.org/rreusser/kmpp.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org//kmpp
+MIT License
