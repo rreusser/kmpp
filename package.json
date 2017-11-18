@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node test/*.js",
     "start": "budo --open --live --host localhost example/index.js",
-    "build": "browserify -g es2040 example/index.js | uglifyjs -cm | indexhtmlify | html-inject-github-corner > docs/index.html"
+    "build": "browserify -g es2040 example/index.js | uglifyjs -cm | indexhtmlify > docs/index.html"
   },
   "repository": {
     "type": "git",
