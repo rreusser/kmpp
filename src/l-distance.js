@@ -3,7 +3,7 @@
 module.exports = Lnorm;
 
 function Lnorm (L) {
-  switch(L) {
+  switch (L) {
     case 0.5:
       return function LSqrtDistance (a, b) {
         var i, sum;
@@ -31,7 +31,7 @@ function Lnorm (L) {
       };
     default:
       return function LDistance (a, b) {
-        var i, sum, dx;
+        var i, sum;
         for (i = a.length - 1, sum = 0; i >= 0; i--) {
           sum += Math.pow(Math.abs(a[i] - b[i]), L);
         }

@@ -1,4 +1,5 @@
 var regl = require('regl');
+var failNicely = require('fail-nicely');
 var panel = require('control-panel');
 var hsl = require('float-hsl2rgb');
 var css = require('insert-css');
@@ -24,11 +25,11 @@ var progress = h('pre.progress');
 document.body.appendChild(progress);
 
 regl({
-  onDone: (err, regl) => {
+  onDone: failNicely((regl) => {
     var pointBuf = regl.buffer();
-    var pointColorBuf = regl.buffer()
+    var pointColorBuf = regl.buffer();
     var centroidBuf = regl.buffer();
-    var centroidColorBuf = regl.buffer()
+    var centroidColorBuf = regl.buffer();
 
     var x, col = [], iteration;
     var km = {};
@@ -64,19 +65,13 @@ regl({
       x = [];
       while (i < settings.points) {
         // Random points; we'll scale these to the viewport:
-        var xp = 2.0 * (Math.random() - 0.5);
-        var yp = 2.0 * (Math.random() - 0.5);
+        var xp = 2.0 * (Math.random() - 0.5) * (ar > 1 ? ar : 1);
+        var yp = 2.0 * (Math.random() - 0.5) * (ar > 1 ? 1 : 1 / ar);
 
-        // Apply an aspect ratio to the distribution:
-        var xar = xp;
-        var yar = yp;
-        xar = ar > 1.0 ? xar * ar : xar;
-        yar = ar > 1.0 ? yar : yar / ar;
-
-        if (Math.pow(distribution(xar, yar), (1.0 - settings.uniformity) * 2.0) > Math.random()) {
-          x[i++] = [xp, yp]
+        if (Math.pow(distribution(xp, yp), (1.0 - settings.uniformity) * 2.0) > Math.random()) {
+          x[i++] = [xp, yp];
         }
-      };
+      }
       restart();
     }
 
@@ -86,10 +81,11 @@ regl({
         attribute vec2 xy;
         attribute vec3 color;
         uniform float size;
+        uniform vec2 aspect;
         varying vec3 col;
         void main () {
           col = color;
-          gl_Position = vec4(xy, 0, 1);
+          gl_Position = vec4(xy * aspect, 0, 1);
           gl_PointSize = size;
         }
       `,
@@ -109,7 +105,7 @@ regl({
       blend: {
         enable: true,
         func: {srcRGB: 'src alpha', srcAlpha: 1, dstRGB: 1, dstAlpha: 1},
-        equation: {rgb: 'reverse subtract', alpha: 'add'},
+        equation: {rgb: 'reverse subtract', alpha: 'add'}
       },
       attributes: {
         xy: regl.prop('xy'),
@@ -117,7 +113,12 @@ regl({
       },
       uniforms: {
         size: (ctx, props) => ctx.pixelRatio * props.size,
-        alpha: regl.prop('alpha')
+        alpha: regl.prop('alpha'),
+        aspect: ctx => {
+          var w = ctx.viewportWidth;
+          var h = ctx.viewportHeight;
+          return w / h > 1 ? [h / w, 1] : [1, w / h];
+        }
       },
       primitive: 'points',
       count: (ctx, props) => props.xy._buffer.byteLength / 8
@@ -130,7 +131,7 @@ regl({
       {label: 'uniformity', type: 'range', min: 0, max: 1, step: 0.1, initial: settings.uniformity},
       {label: 'periodicity', type: 'range', min: 1, max: 10, step: 0.5, initial: settings.periodicity},
       {label: 'kmpp', type: 'checkbox', initial: settings.kmpp},
-      {label: 'restart', type: 'button', action: restart},
+      {label: 'restart', type: 'button', action: restart}
     ], {position: 'top-left', width: 350}).on('input', (data) => {
       var needsInitialize = false;
       var needsRestart = false;
@@ -151,16 +152,16 @@ regl({
     window.addEventListener('resize', initialize, false);
 
     iteration = 0;
-    regl.frame(() => {
+    regl.frame(({tick}) => {
       if (km.converged) return;
 
       iteration++;
 
-      kmpp(x, {maxIterations: 1,
+      km = kmpp(x, Object.assign({maxIterations: 1,
         norm: settings.norm,
         k: settings.k === 0 ? undefined : settings.k,
         kmpp: settings.kmpp
-      }, km);
+      }, km));
 
       progress.textContent = km.converged ? ('converged after ' + iteration + ' iterations') : ('iteration: ' + iteration);
 
@@ -187,5 +188,5 @@ regl({
         alpha: 1.0
       });
     });
-  }
+  })
 });

@@ -38,7 +38,7 @@ kmpp([
 
 ## API
 
-### `kmpp(points[, opts, [state])`
+### `kmpp(points[, opts)`
 
 Exectes the k-means++ algorithm on `points`.
 
@@ -46,12 +46,14 @@ Arguments:
 - `points` (`Array`): An array-of-arrays containing the points in format `[[x1, y1, ...], [x2, y2, ...], [x3, y3, ...], ...]`
 - `opts`: object containing configuration parameters. Parameters are
   - `distance` (`function`): Optional function that takes two points and returns the distance between them.
-  - `initialize` (`Boolean`): If a valid existing state is passed as the third argument, `kmpp` will by default not reinitialize the centroids. This argument may be used to override this default by forcing reinitialization.
+  - `initialize` (`Boolean`): Perform initialization. If false, uses the initial state provided in `centroids` and `assignments`. Otherwise discards any initial state and performs initialization.
   - `k` (`Number`): number of centroids. If not provided, `sqrt(n / 2)` is used, where `n` is the number of points.
   - `kmpp` (`Boolean`, default: `true`): If true, uses k-means++ initialization. Otherwise uses naive random assignment.
   - `maxIterations` (`Number`, default: `100`): Maximum allowed number of iterations.
   - `norm` (`Number`, default: `2`): L-norm used for distance computation. `1` is Manhattan norm, `2` is Euclidean norm. Ignored if `distance` function is provided.
-- `state` (`Object`): Optional input state. Format is expected to match the return value of `kmpp`, so that if you want to show incremental progress, you may simply pass the return value of `kmpp` back in as `state` and limit the maximum number of iterations.
+  - `centroids` (`Array`): An array of centroids. If `initialize` is false, used as initialization for the algorithm, otherwise overwritten in-place if of the correct size.
+  - `assignments` (`Array`): An array of assignments. Used for initialization, otherwise overwritten.
+  - `counts` (`Array`): An output array used to avoid extra allocation. Values are discarded and overwritten.
 
 Returns an object containing information about the centroids and point assignments. Values are:
 - `converged`: `true` if the algorithm converged successfully

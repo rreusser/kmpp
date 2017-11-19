@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = kmeans;
 
@@ -7,11 +7,10 @@ var initializeNaive = require('./src/initialize-naive');
 var iterate = require('./src/iterate');
 var distanceMetric = require('./src/l-distance');
 
-function kmeans (points, opts, state) {
-  var i, k, n, dim, iter, converged, c, initializer;
+function kmeans (points, opts) {
+  var i, k, n, dim, iter, c, initializer, initialize;
 
   opts = opts || {};
-  var initialize = opts.initialize === undefined ? (!state.centroids) : opts.initialize;
   var kmpp = opts.kmpp === undefined ? true : !!opts.kmpp;
   var norm = opts.norm === undefined ? 2 : opts.norm;
   var distance = opts.distance === undefined ? distanceMetric(norm) : opts.distance;
@@ -26,31 +25,47 @@ function kmeans (points, opts, state) {
     k = opts.k;
   }
 
-  state = state || {};
-  state.centroids = state.centroids || new Array(k);
-  state.counts = state.counts || new Array(k);
-  state.assignments = state.assignments || new Array(n);
+  var out = {};
+  if (Array.isArray(opts.centroids) && opts.centroids.length === k) {
+    initialize = opts.initialize === undefined ? false : opts.initialize;
+    out.centroids = opts.centroids;
+  } else {
+    initialize = opts.initialize === undefined ? true : opts.initialize;
+    out.centroids = new Array(k);
+  }
+
+  if (Array.isArray(opts.counts) && opts.counts.length === k) {
+    out.counts = opts.counts;
+  } else {
+    out.counts = new Array(k);
+  }
+
+  if (Array.isArray(opts.assignments) && opts.assignments.length === n) {
+    out.assignments = opts.assignments;
+  } else {
+    out.assignments = new Array(k);
+  }
 
   // Initialize the components of the centroids if they don't look right:
   for (i = 0; i < k; i++) {
-    c = state.centroids[i];
-    if (!Array.isArray(c) || state.centroids[i].length !== dim) {
-      state.centroids[i] = [];
+    c = out.centroids[i];
+    if (!Array.isArray(c) || out.centroids[i].length !== dim) {
+      out.centroids[i] = [];
     }
   }
 
   if (initialize) {
     initializer = kmpp ? initializeKmpp : initializeNaive;
 
-    initializer(k, points, state, distance);
+    initializer(k, points, out, distance);
   }
 
-  state.converged = state.converged || false;
+  out.converged = out.converged || false;
   iter = 0;
 
-  while (!state.converged && ++iter <= maxIterations) {
-    state.converged = iterate(k, points, state, distance);
+  while (!out.converged && ++iter <= maxIterations) {
+    out.converged = iterate(k, points, out, distance);
   }
 
-  return state;
-};
+  return out;
+}
