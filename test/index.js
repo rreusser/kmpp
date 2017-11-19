@@ -39,7 +39,6 @@ test('runs successfully without km++ initialization', function (t) {
 
   k = 3;
   n = 20;
-  offset = 1e6;
 
   for (i = 0, x = []; i < n; i++) {
     x[i] = [Math.floor(i * k / n) * 1e6 + i];
@@ -47,7 +46,6 @@ test('runs successfully without km++ initialization', function (t) {
 
   for (run = 0; run < runs; run++) {
     var out = kmpp(x, {k: k, kmpp: false});
-    console.log(out);
 
     var sum = 0;
     for (i = 0; i < k; i++) {
