@@ -2,11 +2,9 @@
 
 When dealing with lots of data points, clustering algorithms may be used to group them. The k-means algorithm partitions _n_ data points into _k_ clusters and finds the centroids of these clusters incrementally.
 
-The basic k-means algorithm is initialized with _k_ centroids at random positions.
+The algorithm assigns data points to the closest cluster, and the centroids of each cluster are re-calculated. These steps are repeated until the centroids do not changing anymore.
 
-It assigns data points to the closest cluster, the centroids of each cluster are re-calculated afterwards. These assignment/recalculating steps are repeated until the centroids are not changing anymore.
-
-This implementation addresses some disadvantages of the arbitrary initialization method with the k-means++ algorithm (see "Further reading" at the end).
+The basic k-means algorithm is initialized with _k_ centroids at random positions. This implementation addresses some disadvantages of the arbitrary initialization method with the k-means++ algorithm (see "Further reading" at the end).
 
 ## Installation
 
