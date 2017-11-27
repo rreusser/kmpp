@@ -31,7 +31,7 @@ regl({
     var centroidBuf = regl.buffer();
     var centroidColorBuf = regl.buffer();
 
-    var x, col = [], iteration;
+    var x, iteration;
     var km = {};
     var settings = {
       norm: 2,
