@@ -60,6 +60,7 @@ Returns an object containing information about the centroids and point assignmen
 - `centroids`: a list of centroids
 - `counts`: the number of points assigned to each respective centroid
 - `assignments`: a list of integer assignments of each point to the respective centroid
+- `iterations`: number of iterations used
 
 # Credits
 

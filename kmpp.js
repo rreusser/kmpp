@@ -67,5 +67,7 @@ function kmeans (points, opts) {
     out.converged = iterate(k, points, out, distance);
   }
 
+  out.iterations = iter;
+
   return out;
 }
